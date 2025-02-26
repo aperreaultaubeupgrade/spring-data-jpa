@@ -32,6 +32,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.sample.Child;
@@ -60,6 +61,18 @@ class ParentRepositoryIntegrationTests {
 		repository.save(new Parent().add(new Child()));
 		repository.save(new Parent());
 		repository.flush();
+	}
+
+	@Test
+	void listIsNullAndPageableWithResultBiggerThanPageSize_fails() {
+
+		repository.withIds(null, Pageable.ofSize(1));
+	}
+
+	@Test
+	void listIsNullAndPageableWithResultSmallerThanPageSize_success() {
+
+		repository.withIds(null, Pageable.ofSize(10));
 	}
 
 	@Test // DATAJPA-287
